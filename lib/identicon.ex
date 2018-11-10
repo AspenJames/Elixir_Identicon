@@ -53,19 +53,24 @@ defmodule Identicon do
   ## Examples
 
       iex> image = Identicon.hash_input("identicon")
+      iex> |> Identicon.pick_color
       iex> Identicon.build_grid(image)
-      [
-        [173, 43, 65, 43, 173],
-        [97, 60, 135, 60, 97],
-        [2, 181, 55, 181, 2],
-        [43, 189, 201, 189, 43],
-        [168, 16, 112, 16, 168]
-      ]
+      %Identicon.Image{
+        color: {173, 43, 65},
+        grid: [ {173, 0}, {43, 1}, {65, 2}, {43, 3}, {173, 4}, {97, 5}, {60, 6}, {135, 7}, {60, 8}, {97, 9}, {2, 10}, {181, 11}, {55, 12}, {181, 13}, {2, 14}, {43, 15}, {189, 16}, {201, 17}, {189, 18}, {43, 19}, {168, 20}, {16, 21}, {112, 22}, {16, 23}, {168, 24} ],
+        hex: [173, 43, 65, 97, 60, 135, 2, 181, 55, 43, 189, 201, 168, 16, 112, 64]
+      }
+
   """
   def build_grid(%Identicon.Image{hex: hex} = image) do
-    hex
-    |> Enum.chunk(3)
-    |> Enum.map(&mirror_row/1)
+    grid =
+      hex
+      |> Enum.chunk(3)
+      |> Enum.map(&mirror_row/1)
+      |> List.flatten
+      |> Enum.with_index
+
+    %Identicon.Image{image | grid: grid}
   end
 
   @doc """
