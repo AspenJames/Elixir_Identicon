@@ -10,6 +10,7 @@ defmodule Identicon do
     |> hash_input
     |> pick_color
     |> build_grid
+    |> filter_odd_squares
   end
 
   @doc """
@@ -85,5 +86,29 @@ defmodule Identicon do
   def mirror_row(row) do
     [first, second | _] = row
     row ++ [second, first]
+  end
+
+  @doc """
+  This accepts an `%Identicon.Image{}` as an argument, and returns an `%Identicon.Image{}` whose `grid` property has had all odd values filtered out 
+
+  ## Examples
+
+      iex> image = Identicon.hash_input("identicon")
+      iex> |> Identicon.pick_color
+      iex> |> Identicon.build_grid
+      iex> Identicon.filter_odd_squares(image)
+      %Identicon.Image{
+        color: {173, 43, 65},
+        grid: [ {173, 0}, {43, 1}, {65, 2}, {43, 3}, {173, 4}, {97, 5}, {60, 6}, {135, 7}, {60, 8}, {97, 9}, {2, 10}, {181, 11}, {55, 12}, {181, 13}, {2, 14}, {43, 15}, {189, 16}, {201, 17}, {189, 18}, {43, 19}, {168, 20}, {16, 21}, {112, 22}, {16, 23}, {168, 24} ],
+        hex: [173, 43, 65, 97, 60, 135, 2, 181, 55, 43, 189, 201, 168, 16, 112, 64]
+      }
+
+  """
+  def filter_odd_squares(%Identicon.Image{grid: grid} = image) do
+    Enum.filter grid, fn({code, _}) -> 
+      rem(code, 2) == 0
+    end
+
+    %Identicon.Image{image | grid: grid}
   end
 end
