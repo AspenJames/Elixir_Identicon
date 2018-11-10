@@ -13,7 +13,7 @@ defmodule Identicon do
   @doc """
   Converts the passed-in string to a list of numbers based on the MD5 hash of the string, then stores that in an `%Identicon.Image{}` struct, setting that list as the `hex` value
 
-  ## Examples 
+  ## Examples
 
       iex> Identicon.hash_input("identicon")
       %Identicon.Image{
@@ -31,7 +31,7 @@ defmodule Identicon do
   @doc """
   Takes in an %Identicon.Image{} and returns the first three elements of the hex list property, setting those as a color property
 
-  ## Examples 
+  ## Examples
 
       iex> image = Identicon.hash_input("identicon")
       iex> Identicon.pick_color(image)
@@ -45,16 +45,31 @@ defmodule Identicon do
     %Identicon.Image{image | color: {r, g, b}}
   end
 
+  @doc """
+  Takes in an argument of %Identicon.Image, chunks the hex property into sub-lists of length 3, and "mirrors" them across the center
+
+  ## Examples
+
+      iex> image = Identicon.hash_input("identicon")
+      iex> Identicon.build_grid(image)
+      [
+        [173, 43, 65, 43, 173],
+        [97, 60, 135, 60, 97],
+        [2, 181, 55, 181, 2],
+        [43, 189, 201, 189, 43],
+        [168, 16, 112, 16, 168]
+      ]
+  """
   def build_grid(%Identicon.Image{hex: hex} = image) do
     hex
     |> Enum.chunk(3)
-    # |> mirror_row
+    |> Enum.map(&mirror_row/1)
   end
 
   @doc """
-  "Mirrors" a list of elements across the center. 
+  "Mirrors" a list of elements across the center.
 
-  ## Examples 
+  ## Examples
 
       iex> Identicon.mirror_row([173, 43, 65])
       [173, 43, 65, 43, 173]
