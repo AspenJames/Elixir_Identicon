@@ -2,7 +2,9 @@ defmodule Identicon do
   @moduledoc """
   Generates an Identicon based on a passed-in string
   """
-
+  @doc """
+  This simply runs all of the helper functions in order. Accepts an argument of a string and returns a generated Identicon
+  """
   def main(input) do
     input
     |> hash_input
@@ -29,7 +31,7 @@ defmodule Identicon do
   end
 
   @doc """
-  Takes in an %Identicon.Image{} and returns the first three elements of the hex list property, setting those as a color property
+  Takes in an `%Identicon.Image{}` and returns the first three elements of the hex list property, setting those as a color property
 
   ## Examples
 
@@ -46,7 +48,7 @@ defmodule Identicon do
   end
 
   @doc """
-  Takes in an argument of %Identicon.Image, chunks the hex property into sub-lists of length 3, and "mirrors" them across the center
+  Takes in an argument of `%Identicon.Image{}`, chunks the `hex` property into sub-lists of length 3, and "mirrors" them across the center
 
   ## Examples
 
